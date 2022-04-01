@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.31515.178
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Block-Diagram-App", "Block-Diagram-App\Block-Diagram-App.csproj", "{927D4B06-960F-462B-A542-161C6FFE884E}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{927D4B06-960F-462B-A542-161C6FFE884E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{927D4B06-960F-462B-A542-161C6FFE884E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{927D4B06-960F-462B-A542-161C6FFE884E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{927D4B06-960F-462B-A542-161C6FFE884E}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {8B7674D0-65BB-463B-8159-A6BAA02FE6E1}
+	EndGlobalSection
+EndGlobal
