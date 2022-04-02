@@ -68,16 +68,68 @@ namespace Block_Diagram_App
             {
                 using (Font font = new Font("Arial", 8))
                 {
-                    var sizeofString = g.MeasureString(label, font);
                     var stringFormat = new StringFormat();
                     stringFormat.LineAlignment = StringAlignment.Center;
                     stringFormat.Alignment = StringAlignment.Center;
+
                     var rect = new Rectangle(X, Y, width, height);
+
                     g.DrawString(label, font, Brushes.Black, 
                         rect, stringFormat);
                 }
             }
            
+        }
+    }
+
+    public class DecBlock : Block
+    {
+        private List<Point> points;
+
+        public DecBlock(int X, int Y, int width, int height, Bitmap bitmap, Brush brush, Pen pen)
+            : base(X, Y, width, height, bitmap, brush, pen)
+        {
+            points = new List<Point>();
+
+            points.Add(new Point(X - width / 2, Y));
+            points.Add(new Point(X, Y - height / 2));
+            points.Add(new Point(X + width / 2, Y));
+            points.Add(new Point(X, Y + height / 2));
+        }
+
+        public override void DrawBlock()
+        {
+            using (Graphics g = Graphics.FromImage(bitmap))
+            {
+                g.DrawPolygon(pen, points.ToArray());
+            }
+        }
+
+        public override void FillBlock()
+        {
+            using (Graphics g = Graphics.FromImage(bitmap))
+            {
+                g.FillPolygon(Brushes.White, points.ToArray());
+            }
+        }
+
+        public override void PutLabel(string label)
+        {
+            using (Graphics g = Graphics.FromImage(bitmap))
+            {
+                using (Font font = new Font("Arial", 8))
+                {
+                    var stringFormat = new StringFormat();
+                    stringFormat.LineAlignment = StringAlignment.Center;
+                    stringFormat.Alignment = StringAlignment.Center;
+
+                    var rect = new Rectangle(X-width/2, Y-height/2, width, height);
+
+                    g.DrawString(label, font, Brushes.Black,
+                        rect, stringFormat);
+                }
+            }
+
         }
     }
 }

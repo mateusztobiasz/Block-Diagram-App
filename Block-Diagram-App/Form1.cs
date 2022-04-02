@@ -17,9 +17,17 @@ namespace Block_Diagram_App
             Width = 120,
             Height = 60,
         }
+        private enum DecDimensions
+        {
+            Width = 120,
+            Height = 90
+        }
+
         private readonly Brush Operbrush = Brushes.White;
         private readonly string Operlabel = "Blok operacyjny";
-        private readonly Pen Operpen = new Pen(Brushes.Black, 3);
+        private readonly string Declabel = "Blok\ndecyzji";
+
+        private readonly Pen pen = new Pen(Brushes.Black, 3);
 
         private Bitmap bitmap;
         private List<Block> listOfBlocks;
@@ -29,11 +37,12 @@ namespace Block_Diagram_App
         {
             InitializeComponent();
 
-            bitmap = new Bitmap(Canvas.Size.Width+100, Canvas.Size.Height+100);
+            bitmap = new Bitmap(Canvas.Size.Width + 100, Canvas.Size.Height + 100);
+            listOfBlocks = new List<Block>();
 
             Canvas.Image = bitmap;
 
-            using(Graphics g = Graphics.FromImage(bitmap))
+            using (Graphics g = Graphics.FromImage(bitmap))
             {
                 g.Clear(Color.White);
             }
@@ -46,28 +55,39 @@ namespace Block_Diagram_App
 
         private void decisionBlockButton_CheckedChanged(object sender, EventArgs e)
         {
-           
+            typeChecked = typeof(DecBlock);
         }
 
         private void Canvas_MouseDown(object sender, MouseEventArgs e)
         {
-            if(e.Button == MouseButtons.Left)
-            { 
-                if(typeChecked == typeof(OperBlock))
+            if (e.Button == MouseButtons.Left)
+            {
+                if (typeChecked == typeof(OperBlock))
                 {
-                    Block block = new OperBlock(e.X - (int)OperDimensions.Width/2, e.Y - (int)OperDimensions.Height,
+                    Block block = new OperBlock(e.X - (int)OperDimensions.Width / 2, e.Y - (int)OperDimensions.Height,
                         (int)OperDimensions.Width, (int)OperDimensions.Height,
-                        bitmap, Operbrush, Operpen);
+                        bitmap, Operbrush, pen);
 
-                    
+                    listOfBlocks.Add(block);
+
                     block.FillBlock();
                     block.PutLabel(Operlabel);
                     block.DrawBlock();
-                    
-                }
 
+                }
+                else if (typeChecked == typeof(DecBlock))
+                {
+                    Block block = new DecBlock(e.X, e.Y, (int)DecDimensions.Width, (int)DecDimensions.Height,
+                        bitmap, Operbrush, pen);
+
+                    listOfBlocks.Add(block);
+
+                    block.FillBlock();
+                    block.PutLabel(Declabel);
+                    block.DrawBlock();
+                }
                 Canvas.Refresh();
-                
+
             }
         }
     }
