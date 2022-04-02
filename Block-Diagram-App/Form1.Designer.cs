@@ -198,6 +198,7 @@ namespace Block_Diagram_App
             this.newSchemaButton.TabIndex = 0;
             this.newSchemaButton.Text = "Nowy Schemat";
             this.newSchemaButton.UseVisualStyleBackColor = true;
+            this.newSchemaButton.Click += new System.EventHandler(this.newSchemaButton_Click);
             // 
             // loadSchemaButton
             // 

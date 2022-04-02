@@ -33,12 +33,10 @@ namespace Block_Diagram_App
         private List<Block> listOfBlocks;
         private Type typeChecked = typeof(OperBlock);
 
-        public BloqLab()
-        {
-            InitializeComponent();
 
-            bitmap = new Bitmap(Canvas.Size.Width + 100, Canvas.Size.Height + 100);
-            listOfBlocks = new List<Block>();
+        private void SetBitmap(int width, int height)
+        {
+            bitmap = new Bitmap(width, height);
 
             Canvas.Image = bitmap;
 
@@ -46,6 +44,14 @@ namespace Block_Diagram_App
             {
                 g.Clear(Color.White);
             }
+        }
+        public BloqLab()
+        {
+            InitializeComponent();
+            SetBitmap(Canvas.Size.Width, Canvas.Size.Height);
+
+            listOfBlocks = new List<Block>();
+        
         }
 
         private void operationBlockButton_CheckedChanged(object sender, EventArgs e)
@@ -64,7 +70,7 @@ namespace Block_Diagram_App
             {
                 if (typeChecked == typeof(OperBlock))
                 {
-                    Block block = new OperBlock(e.X - (int)OperDimensions.Width / 2, e.Y - (int)OperDimensions.Height,
+                    Block block = new OperBlock(e.X - (int)OperDimensions.Width / 2, e.Y - (int)OperDimensions.Height/2,
                         (int)OperDimensions.Width, (int)OperDimensions.Height,
                         bitmap, Operbrush, pen);
 
@@ -89,6 +95,25 @@ namespace Block_Diagram_App
                 Canvas.Refresh();
 
             }
+        }
+
+        private void newSchemaButton_Click(object sender, EventArgs e)
+        {
+            NewBitmapForm newBitmapForm = new NewBitmapForm();
+
+           
+            newBitmapForm.StartPosition = FormStartPosition.CenterParent;
+            newBitmapForm.ShowDialog();
+            newBitmapForm.Focus();
+
+            Canvas.Width = Convert.ToInt32(newBitmapForm.width); 
+            Canvas.Height = Convert.ToInt32(newBitmapForm.height);
+
+            SetBitmap(Convert.ToInt32(newBitmapForm.width), Convert.ToInt32(newBitmapForm.height));
+
+
+            Canvas.Refresh();
+
         }
     }
 }
