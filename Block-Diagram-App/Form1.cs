@@ -35,7 +35,7 @@ namespace Block_Diagram_App
         private readonly string Endlabel = "STOP";
 
         private readonly Pen pen = new Pen(Brushes.Black, 3);
-        private readonly Pen penStart = new Pen(Brushes.LawnGreen, 3);
+        private readonly Pen penStart = new Pen(Brushes.LawnGreen);
         private readonly Pen penEnd = new Pen(Brushes.Red, 3);
 
         private Bitmap bitmap;
@@ -119,12 +119,45 @@ namespace Block_Diagram_App
 
         }
 
+        private Block ChooseClosestElement(int x, int y)
+        {
+            List<Block> blocks = new List<Block>();
+
+            foreach (var block in listOfBlocks)
+            {
+                if (block.CheckIfClickInside(x, y))
+                {
+                    blocks.Add(block);
+                }
+            }
+
+            if (blocks.Count != 0)
+            {
+                double minDistance = double.MaxValue;
+                Block block = null;
+                double d;
+                foreach (var block1 in blocks)
+                {
+                    if ((d = block1.GetDistance(x, y)) < minDistance)
+                    {
+                        block = block1;
+                        minDistance = d;
+                    }
+                }
+
+                return block;
+            }
+
+            return null;
+            
+        }
 
         private void Canvas_MouseDown(object sender, MouseEventArgs e)
         {
-            if (!removeEnabled)
+
+            if (e.Button == MouseButtons.Left)
             {
-                if (e.Button == MouseButtons.Left)
+                if (!removeEnabled)
                 {
                     if (typeChecked == typeof(OperBlock))
                     {
@@ -152,7 +185,7 @@ namespace Block_Diagram_App
                     {
                         if (!ifStart)
                         {
-                            Block block = new StartBlock(e.X - (int)StartDimensions.Width / 2 , e.Y - (int)StartDimensions.Height / 2,
+                            Block block = new StartBlock(e.X - (int)StartDimensions.Width / 2, e.Y - (int)StartDimensions.Height / 2,
                             (int)StartDimensions.Width, (int)StartDimensions.Height);
 
                             listOfBlocks.Add(block);
@@ -166,12 +199,12 @@ namespace Block_Diagram_App
                         {
                             MessageBox.Show("Schemat już posiada jeden blok startowy.");
                         }
-                        
-                        
+
+
                     }
                     else if (typeChecked == typeof(EndBlock))
                     {
-                        
+
                         Block block = new EndBlock(e.X - (int)StartDimensions.Width / 2, e.Y - (int)StartDimensions.Height / 2,
                         (int)StartDimensions.Width, (int)StartDimensions.Height);
 
@@ -180,26 +213,79 @@ namespace Block_Diagram_App
                         block.FillBlock(bitmap, penEnd, Operbrush);
                         block.PutLabel(Endlabel, bitmap, pen, Operbrush);
                         block.DrawBlock(bitmap, penEnd, Operbrush);
-                           
-                        
+
+
 
 
                     }
                     Canvas.Refresh();
                 }
+                else
+                {
+                    Block blockToRemove = ChooseClosestElement(e.X, e.Y);  
+                        
+                    if (blockToRemove is StartBlock) ifStart = false;
+                    listOfBlocks.Remove(blockToRemove);
+                    
+
+                    SetBitmap(Canvas.Size.Width, Canvas.Size.Height);
+
+                    foreach (var block in listOfBlocks)
+                    {
+                        if(block is OperBlock)
+                        {
+                            block.FillBlock(bitmap, pen, Operbrush);
+                            block.PutLabel(Operlabel, bitmap, pen, Operbrush);
+                            block.DrawBlock(bitmap, pen, Operbrush);
+
+                        }
+                        else if(block is DecBlock)
+                        {
+                            block.FillBlock(bitmap, pen, Operbrush);
+                            block.PutLabel(Declabel, bitmap, pen, Operbrush);
+                            block.DrawBlock(bitmap, pen, Operbrush);
+                        }
+                        else if(block is StartBlock)
+                        {
+                            block.FillBlock(bitmap, penStart, Operbrush);
+                            block.PutLabel(Startlabel, bitmap, pen, Operbrush);
+                            block.DrawBlock(bitmap, penStart, Operbrush);
+                        }
+                        else
+                        {
+                            block.FillBlock(bitmap, penEnd, Operbrush);
+                            block.PutLabel(Endlabel, bitmap, pen, Operbrush);
+                            block.DrawBlock(bitmap, penEnd, Operbrush);
+
+                        }
+                    }
+
+                    Canvas.Refresh();
+            
+
+                }
             }
 
-            else
+            else if(e.Button == MouseButtons.Right)
             {
+                //Block block = ChooseClosestElement(e.X, e.Y);
+                //Pen dashedPen = null;
+                //if(block is OperBlock)
+                //{
+                //    pen.DashPattern = new 
+                //}
 
             }
-           
+                
         }
 
+
+            
+           
+     }
+
         
-    }
-
-
-
-
 }
+
+
+
