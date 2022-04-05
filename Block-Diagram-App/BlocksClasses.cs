@@ -15,38 +15,35 @@ namespace Block_Diagram_App
         protected int width;
         protected int height;
 
-        protected Bitmap bitmap;
-        protected Brush brush;
-        protected Pen pen;
+        
 
-        protected Block(int X,int Y,int width,int height, Bitmap bitmap, Brush brush, Pen pen)
+        protected Block(int X,int Y,int width,int height)
         {
             this.X = X;
             this.Y = Y;
             this.width = width;
             this.height = height;
-            this.bitmap = bitmap;
-            this.brush = brush;
-            this.pen = pen;
+           
+          
         }
 
-        public abstract void DrawBlock();
+        public abstract void DrawBlock(Bitmap bitmap, Pen pen, Brush brush);
 
         
-        public abstract void FillBlock();
+        public abstract void FillBlock(Bitmap bitmap, Pen pen, Brush brush);
         
 
-        public abstract void PutLabel(string label);
+        public abstract void PutLabel(string label, Bitmap bitmap, Pen pen, Brush brush);
        
     }
     public class OperBlock : Block
     {
-        
+        // X,Y - lewy gorny róg prostokąta
 
-        public OperBlock(int X, int Y, int width, int height,Bitmap bitmap, Brush brush, Pen pen) 
-            : base(X, Y, width, height,bitmap, brush, pen) { }
+        public OperBlock(int X, int Y, int width, int height) 
+            : base(X, Y, width, height) { }
         
-        public override void DrawBlock()
+        public override void DrawBlock(Bitmap bitmap, Pen pen, Brush brush)
         {
             using (Graphics g = Graphics.FromImage(bitmap))
             {
@@ -54,7 +51,7 @@ namespace Block_Diagram_App
             }
         }
 
-        public override void FillBlock()
+        public override void FillBlock(Bitmap bitmap, Pen pen, Brush brush)
         {
             using (Graphics g = Graphics.FromImage(bitmap))
             {
@@ -62,7 +59,7 @@ namespace Block_Diagram_App
             }
         }
 
-        public override void PutLabel(string label)
+        public override void PutLabel(string label, Bitmap bitmap, Pen pen, Brush brush)
         {
             using(Graphics g = Graphics.FromImage(bitmap))
             {
@@ -84,10 +81,12 @@ namespace Block_Diagram_App
 
     public class DecBlock : Block
     {
+        // X,Y - środek romba
+
         private List<Point> points;
 
-        public DecBlock(int X, int Y, int width, int height, Bitmap bitmap, Brush brush, Pen pen)
-            : base(X, Y, width, height, bitmap, brush, pen)
+        public DecBlock(int X, int Y, int width, int height)
+            : base(X, Y, width, height)
         {
             points = new List<Point>();
 
@@ -97,7 +96,7 @@ namespace Block_Diagram_App
             points.Add(new Point(X, Y + height / 2));
         }
 
-        public override void DrawBlock()
+        public override void DrawBlock(Bitmap bitmap, Pen pen, Brush brush)
         {
             using (Graphics g = Graphics.FromImage(bitmap))
             {
@@ -105,15 +104,15 @@ namespace Block_Diagram_App
             }
         }
 
-        public override void FillBlock()
+        public override void FillBlock(Bitmap bitmap, Pen pen, Brush brush)
         {
             using (Graphics g = Graphics.FromImage(bitmap))
             {
-                g.FillPolygon(Brushes.White, points.ToArray());
+                g.FillPolygon(brush, points.ToArray());
             }
         }
 
-        public override void PutLabel(string label)
+        public override void PutLabel(string label, Bitmap bitmap, Pen pen, Brush brush)
         {
             using (Graphics g = Graphics.FromImage(bitmap))
             {
@@ -130,6 +129,89 @@ namespace Block_Diagram_App
                 }
             }
 
+        }
+    }
+
+    public class StartBlock : Block
+    {
+
+        public StartBlock(int X, int Y, int width, int height)
+            : base(X, Y, width, height) { }
+
+        public override void DrawBlock(Bitmap bitmap, Pen pen, Brush brush)
+        {
+            using (Graphics g = Graphics.FromImage(bitmap))
+            {
+                g.DrawEllipse(pen, X, Y, width, height);
+            }
+        }
+
+        public override void FillBlock(Bitmap bitmap, Pen pen, Brush brush)
+        {
+            using (Graphics g = Graphics.FromImage(bitmap))
+            {
+                g.FillEllipse(brush, X,Y,width,height);
+            }
+        }
+
+        public override void PutLabel(string label, Bitmap bitmap, Pen pen, Brush brush)
+        {
+            //throw new NotImplementedException();
+            using (Graphics g = Graphics.FromImage(bitmap))
+            {
+                using (Font font = new Font("Arial", 8))
+                {
+                    var stringFormat = new StringFormat();
+                    stringFormat.LineAlignment = StringAlignment.Center;
+                    stringFormat.Alignment = StringAlignment.Center;
+
+                    var rect = new Rectangle(X , Y , width, height);
+
+                    g.DrawString(label, font, Brushes.Black,
+                        rect, stringFormat);
+                }
+            }
+        }
+    }
+    public class EndBlock : Block
+    {
+
+        public EndBlock(int X, int Y, int width, int height)
+            : base(X, Y, width, height) { }
+
+        public override void DrawBlock(Bitmap bitmap, Pen pen, Brush brush)
+        {
+            using (Graphics g = Graphics.FromImage(bitmap))
+            {
+                g.DrawEllipse(pen, X, Y, width, height);
+            }
+        }
+
+        public override void FillBlock(Bitmap bitmap, Pen pen, Brush brush)
+        {
+            using (Graphics g = Graphics.FromImage(bitmap))
+            {
+                g.FillEllipse(brush, X, Y, width, height);
+            }
+        }
+
+        public override void PutLabel(string label, Bitmap bitmap, Pen pen, Brush brush)
+        {
+            //throw new NotImplementedException();
+            using (Graphics g = Graphics.FromImage(bitmap))
+            {
+                using (Font font = new Font("Arial", 8))
+                {
+                    var stringFormat = new StringFormat();
+                    stringFormat.LineAlignment = StringAlignment.Center;
+                    stringFormat.Alignment = StringAlignment.Center;
+
+                    var rect = new Rectangle(X, Y, width, height);
+
+                    g.DrawString(label, font, Brushes.Black,
+                        rect, stringFormat);
+                }
+            }
         }
     }
 }
