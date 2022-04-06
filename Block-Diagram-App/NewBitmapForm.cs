@@ -13,8 +13,8 @@ namespace Block_Diagram_App
     public partial class NewBitmapForm : Form
     {
 
-        public decimal height;
-        public decimal width;
+        public decimal height = -1;
+        public decimal width = -1;
 
         public NewBitmapForm()
         {

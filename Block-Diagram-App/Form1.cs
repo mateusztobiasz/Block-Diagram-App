@@ -28,12 +28,14 @@ namespace Block_Diagram_App
             Height = 60,
         }
 
-        private readonly Brush Operbrush = Brushes.White;
-        private readonly string Operlabel = "Blok operacyjny";
-        private readonly string Declabel = "Blok\ndecyzji";
+       
+        private string Operlabel = "blok operacyjny";
+        private string Declabel = "blok\ndecyzji"; 
         private readonly string Startlabel = "START";
         private readonly string Endlabel = "STOP";
+       
 
+        private readonly Brush Operbrush = Brushes.White;
         private readonly Pen pen = new Pen(Brushes.Black, 3);
         private readonly Pen penStart = new Pen(Brushes.LawnGreen,3);
         private readonly Pen penEnd = new Pen(Brushes.Red, 3);
@@ -47,10 +49,14 @@ namespace Block_Diagram_App
         private bool removeEnabled = false;
         private bool ifStart = false;
 
+        private NewBitmapForm newBitmapForm;
+
 
         private void SetBitmap(int width, int height)
         {
             bitmap = new Bitmap(width, height);
+
+            
 
             Canvas.Image = bitmap;
 
@@ -61,6 +67,10 @@ namespace Block_Diagram_App
         }
         public BloqLab()
         {
+
+            //polishButton.Enabled = true;
+            //englishButton.Enabled = true;
+
             InitializeComponent();
             SetBitmap(Canvas.Size.Width, Canvas.Size.Height);
 
@@ -98,16 +108,25 @@ namespace Block_Diagram_App
 
         private void newSchemaButton_Click(object sender, EventArgs e)
         {
+            textBoxBlock.Text = " ";
+            textBoxBlock.Enabled = false;
+            ifStart = false;
 
-            NewBitmapForm newBitmapForm = new NewBitmapForm();
+            listOfBlocks = new List<Block>();
+
+            newBitmapForm = new NewBitmapForm();
 
 
             newBitmapForm.StartPosition = FormStartPosition.CenterParent;
             newBitmapForm.ShowDialog();
             newBitmapForm.Focus();
 
+            if (newBitmapForm.width == -1 && newBitmapForm.height == -1) return;
+
             Canvas.Width = Convert.ToInt32(newBitmapForm.width);
             Canvas.Height = Convert.ToInt32(newBitmapForm.height);
+
+            
 
             SetBitmap(Convert.ToInt32(newBitmapForm.width), Convert.ToInt32(newBitmapForm.height));
 
@@ -338,10 +357,11 @@ namespace Block_Diagram_App
 
                 RefreshAll();
                 textBoxBlock.Text = checkedBlock.Label;
-                if(checkedBlock is not StartBlock) textBoxBlock.Enabled = true;
-                
+                if (checkedBlock is StartBlock) textBoxBlock.Enabled = false;
+                else textBoxBlock.Enabled = true;
 
-                
+
+
             }
                 
         }
@@ -352,6 +372,60 @@ namespace Block_Diagram_App
             checkedBlock.Label = textBoxBlock.Text;
             RefreshAll();
         }
+
+
+        // kod wzięty ze strony StackOverflow:
+        // https://stackoverflow.com/questions/7556367/how-do-i-change-the-culture-of-a-winforms-application-at-runtime
+
+        //////////////
+        private void applyResources(ComponentResourceManager resources, Control.ControlCollection ctls)
+        {
+            foreach (Control ctl in ctls)
+            {
+                resources.ApplyResources(ctl, ctl.Name);
+                applyResources(resources, ctl.Controls);
+            }
+        }
+
+        private void SetStrings(string language)
+        {
+            Operlabel = (language == "pol") ? "blok operacyjny" : "operation block";
+            Declabel = (language == "pol") ? "blok\ndecyzji" : "decision\nblock";
+            
+        }
+
+        private void polishButton_Click_1(object sender, EventArgs e)
+        {
+            SetStrings("pol");
+            System.Threading.Thread.CurrentThread.CurrentUICulture = new System.Globalization.CultureInfo("pl-Pl");
+            ComponentResourceManager resources = new ComponentResourceManager(typeof(BloqLab));
+            resources.ApplyResources(this, "$this");
+            applyResources(resources, this.Controls);
+
+        }
+        private void englishButton_Click(object sender, EventArgs e)
+        {
+            SetStrings("eng");
+            System.Threading.Thread.CurrentThread.CurrentUICulture = new System.Globalization.CultureInfo("en");
+            ComponentResourceManager resources = new ComponentResourceManager(typeof(BloqLab));
+            resources.ApplyResources(this, "$this");
+            applyResources(resources, this.Controls);
+
+            
+        }
+        /////////////////
+
+        private void saveSchemaButton_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void loadSchemaButton_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        
     }
 
         
