@@ -16,25 +16,28 @@ namespace Block_Diagram_App
         protected int height;
 
         protected Point middle;
-        
 
-        protected Block(int X,int Y,int width,int height)
+        public string Label { get; set; }
+
+
+        protected Block(int X,int Y,int width,int height,string label)
         {
             this.X = X;
             this.Y = Y;
             this.width = width;
             this.height = height;
+            this.Label= label;
            
           
         }
 
-        public abstract void DrawBlock(Bitmap bitmap, Pen pen, Brush brush);
+        public abstract void DrawBlock(Bitmap bitmap, Pen pen);
 
         
         public abstract void FillBlock(Bitmap bitmap, Pen pen, Brush brush);
         
 
-        public abstract void PutLabel(string label, Bitmap bitmap, Pen pen, Brush brush);
+        public abstract void PutLabel(Bitmap bitmap, Pen pen, Brush brush);
 
         public abstract bool CheckIfClickInside(int x, int y);
 
@@ -43,6 +46,8 @@ namespace Block_Diagram_App
         
             return Math.Sqrt(Math.Pow((x - middle.X), 2) + Math.Pow((y - middle.Y), 2));
         }
+
+        
     }
        
     
@@ -50,8 +55,8 @@ namespace Block_Diagram_App
     {
         // X,Y - lewy gorny róg prostokąta
 
-        public OperBlock(int X, int Y, int width, int height) 
-            : base(X, Y, width, height)
+        public OperBlock(int X, int Y, int width, int height,string label) 
+            : base(X, Y, width, height,label)
         {
             middle = new Point(X + width / 2, Y + height / 2);
         }
@@ -66,7 +71,7 @@ namespace Block_Diagram_App
             return true;
         }
 
-        public override void DrawBlock(Bitmap bitmap, Pen pen, Brush brush)
+        public override void DrawBlock(Bitmap bitmap, Pen pen)
         {
             using (Graphics g = Graphics.FromImage(bitmap))
             {
@@ -83,7 +88,7 @@ namespace Block_Diagram_App
         }
 
        
-        public override void PutLabel(string label, Bitmap bitmap, Pen pen, Brush brush)
+        public override void PutLabel(Bitmap bitmap, Pen pen, Brush brush)
         {
             using(Graphics g = Graphics.FromImage(bitmap))
             {
@@ -95,7 +100,7 @@ namespace Block_Diagram_App
 
                     var rect = new Rectangle(X, Y, width, height);
 
-                    g.DrawString(label, font, Brushes.Black, 
+                    g.DrawString(Label, font, Brushes.Black, 
                         rect, stringFormat);
                 }
             }
@@ -109,8 +114,8 @@ namespace Block_Diagram_App
 
         private List<Point> points;
 
-        public DecBlock(int X, int Y, int width, int height)
-            : base(X, Y, width, height)
+        public DecBlock(int X, int Y, int width, int height,string label)
+            : base(X, Y, width, height,label)
         {
             points = new List<Point>();
             middle = new Point(X, Y);
@@ -135,7 +140,7 @@ namespace Block_Diagram_App
             return true;
         }
 
-        public override void DrawBlock(Bitmap bitmap, Pen pen, Brush brush)
+        public override void DrawBlock(Bitmap bitmap, Pen pen)
         {
             using (Graphics g = Graphics.FromImage(bitmap))
             {
@@ -152,7 +157,7 @@ namespace Block_Diagram_App
         }
 
       
-        public override void PutLabel(string label, Bitmap bitmap, Pen pen, Brush brush)
+        public override void PutLabel(Bitmap bitmap, Pen pen, Brush brush)
         {
             using (Graphics g = Graphics.FromImage(bitmap))
             {
@@ -164,7 +169,7 @@ namespace Block_Diagram_App
 
                     var rect = new Rectangle(X-width/2, Y-height/2, width, height);
 
-                    g.DrawString(label, font, Brushes.Black,
+                    g.DrawString(Label, font, Brushes.Black,
                         rect, stringFormat);
                 }
             }
@@ -175,8 +180,8 @@ namespace Block_Diagram_App
     public class StartBlock : Block
     {
         // X,Y - lewy gorny rog
-        public StartBlock(int X, int Y, int width, int height)
-            : base(X, Y, width, height)
+        public StartBlock(int X, int Y, int width, int height,string label)
+            : base(X, Y, width, height, label)
         {
             middle = new Point(X + width / 2, Y + height / 2);
         }
@@ -193,7 +198,7 @@ namespace Block_Diagram_App
             return false;
         }
 
-        public override void DrawBlock(Bitmap bitmap, Pen pen, Brush brush)
+        public override void DrawBlock(Bitmap bitmap, Pen pen)
         {
             using (Graphics g = Graphics.FromImage(bitmap))
             {
@@ -210,7 +215,7 @@ namespace Block_Diagram_App
         }
 
         
-        public override void PutLabel(string label, Bitmap bitmap, Pen pen, Brush brush)
+        public override void PutLabel(Bitmap bitmap, Pen pen, Brush brush)
         {
             
             using (Graphics g = Graphics.FromImage(bitmap))
@@ -223,7 +228,7 @@ namespace Block_Diagram_App
 
                     var rect = new Rectangle(X , Y , width, height);
 
-                    g.DrawString(label, font, Brushes.Black,
+                    g.DrawString(Label, font, Brushes.Black,
                         rect, stringFormat);
                 }
             }
@@ -232,8 +237,8 @@ namespace Block_Diagram_App
     public class EndBlock : Block
     {
 
-        public EndBlock(int X, int Y, int width, int height)
-            : base(X, Y, width, height)
+        public EndBlock(int X, int Y, int width, int height, string label)
+            : base(X, Y, width, height,label)
         {
             middle = new Point(X + width / 2, Y + height / 2);
         }
@@ -250,7 +255,7 @@ namespace Block_Diagram_App
             return false;
         }
 
-        public override void DrawBlock(Bitmap bitmap, Pen pen, Brush brush)
+        public override void DrawBlock(Bitmap bitmap, Pen pen)
         {
             using (Graphics g = Graphics.FromImage(bitmap))
             {
@@ -267,7 +272,7 @@ namespace Block_Diagram_App
         }
 
 
-        public override void PutLabel(string label, Bitmap bitmap, Pen pen, Brush brush)
+        public override void PutLabel(Bitmap bitmap, Pen pen, Brush brush)
         {
             
             using (Graphics g = Graphics.FromImage(bitmap))
@@ -280,7 +285,7 @@ namespace Block_Diagram_App
 
                     var rect = new Rectangle(X, Y, width, height);
 
-                    g.DrawString(label, font, Brushes.Black,
+                    g.DrawString(Label, font, Brushes.Black,
                         rect, stringFormat);
                 }
             }

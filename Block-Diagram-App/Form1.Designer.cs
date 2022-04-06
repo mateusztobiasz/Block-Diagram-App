@@ -33,7 +33,7 @@ namespace Block_Diagram_App
             this.layoutPanel = new System.Windows.Forms.TableLayoutPanel();
             this.editGroupBox = new System.Windows.Forms.GroupBox();
             this.tableLayoutPanel4 = new System.Windows.Forms.TableLayoutPanel();
-            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.textBoxBlock = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
             this.connectBlockButton = new System.Windows.Forms.RadioButton();
@@ -102,7 +102,7 @@ namespace Block_Diagram_App
             // 
             this.tableLayoutPanel4.ColumnCount = 1;
             this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel4.Controls.Add(this.textBox1, 0, 2);
+            this.tableLayoutPanel4.Controls.Add(this.textBoxBlock, 0, 2);
             this.tableLayoutPanel4.Controls.Add(this.label1, 0, 1);
             this.tableLayoutPanel4.Controls.Add(this.tableLayoutPanel2, 0, 0);
             this.tableLayoutPanel4.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -115,16 +115,18 @@ namespace Block_Diagram_App
             this.tableLayoutPanel4.Size = new System.Drawing.Size(238, 344);
             this.tableLayoutPanel4.TabIndex = 3;
             // 
-            // textBox1
+            // textBoxBlock
             // 
-            this.textBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            this.textBoxBlock.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.textBox1.Location = new System.Drawing.Point(3, 202);
-            this.textBox1.Multiline = true;
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(232, 139);
-            this.textBox1.TabIndex = 4;
+            this.textBoxBlock.Enabled = false;
+            this.textBoxBlock.Location = new System.Drawing.Point(3, 202);
+            this.textBoxBlock.Multiline = true;
+            this.textBoxBlock.Name = "textBoxBlock";
+            this.textBoxBlock.Size = new System.Drawing.Size(232, 139);
+            this.textBoxBlock.TabIndex = 4;
+            this.textBoxBlock.TextChanged += new System.EventHandler(this.textBoxBlock_TextChanged);
             // 
             // label1
             // 
@@ -472,7 +474,7 @@ namespace Block_Diagram_App
         private System.Windows.Forms.RadioButton endBlockButton;
         private System.Windows.Forms.RadioButton startBlockButton;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel4;
-        private System.Windows.Forms.TextBox textBox1;
+        private System.Windows.Forms.TextBox textBoxBlock;
         private System.Windows.Forms.GroupBox PlikGroupBox;
         private System.Windows.Forms.GroupBox JezykGroupBox;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel3;
