@@ -3,10 +3,14 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.IO;
 using System.Linq;
+using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Xml;
+using System.Xml.Serialization;
 
 namespace Block_Diagram_App
 {
@@ -33,7 +37,10 @@ namespace Block_Diagram_App
         private string Declabel = "blok\ndecyzji"; 
         private readonly string Startlabel = "START";
         private readonly string Endlabel = "STOP";
-       
+        private string StartIsThere = "Schemat już posiada jeden blok startowy.";
+        private string LoadedSuc = "Schemat wczytany pomyślnie.";
+        private string LoadedFail = "Nie udało się wczytać schematu.";
+
 
         private readonly Brush Operbrush = Brushes.White;
         private readonly Pen pen = new Pen(Brushes.Black, 3);
@@ -68,8 +75,7 @@ namespace Block_Diagram_App
         public BloqLab()
         {
 
-            //polishButton.Enabled = true;
-            //englishButton.Enabled = true;
+            
 
             InitializeComponent();
             SetBitmap(Canvas.Size.Width, Canvas.Size.Height);
@@ -290,7 +296,7 @@ namespace Block_Diagram_App
                         }
                         else
                         {
-                            MessageBox.Show("Schemat już posiada jeden blok startowy.");
+                            MessageBox.Show(StartIsThere);
                         }
 
 
@@ -357,7 +363,7 @@ namespace Block_Diagram_App
 
                 RefreshAll();
                 textBoxBlock.Text = checkedBlock.Label;
-                if (checkedBlock is StartBlock) textBoxBlock.Enabled = false;
+                if (checkedBlock is StartBlock || checkedBlock is EndBlock) textBoxBlock.Enabled = false;
                 else textBoxBlock.Enabled = true;
 
 
@@ -391,7 +397,12 @@ namespace Block_Diagram_App
         {
             Operlabel = (language == "pol") ? "blok operacyjny" : "operation block";
             Declabel = (language == "pol") ? "blok\ndecyzji" : "decision\nblock";
-            
+            StartIsThere = (language == "pol") ? "Schemat już posiada jeden blok startowy." :
+                "The diagram already has one start block.";
+            LoadedSuc = (language == "pol") ? "Schemat wczytany pomyślnie." : "Diagram loaded successfully.";
+            LoadedFail = (language == "pol") ? "Nie udało się wczytać schematu" : "Failed to load the diagram.";
+
+
         }
 
         private void polishButton_Click_1(object sender, EventArgs e)
@@ -417,12 +428,59 @@ namespace Block_Diagram_App
 
         private void saveSchemaButton_Click(object sender, EventArgs e)
         {
+            Stream myStream;
+
+            SaveFileDialog fileDialog = new SaveFileDialog();
+            fileDialog.Filter = "|*.diag";
+
+            if (fileDialog.ShowDialog() == DialogResult.OK)
+            {
+                if ((myStream = fileDialog.OpenFile()) != null)
+                {
+                    var binFor = new BinaryFormatter();
+                    binFor.Serialize(myStream, listOfBlocks);
+                    
+
+                }
+
+                myStream.Close();
+            }
 
         }
 
         private void loadSchemaButton_Click(object sender, EventArgs e)
         {
+            Stream myStream;
 
+            OpenFileDialog fileDialog = new OpenFileDialog();
+            fileDialog.Filter = "|*.diag";
+
+            if (fileDialog.ShowDialog() == DialogResult.OK)
+            {
+                if ((myStream = fileDialog.OpenFile()) != null)
+                {
+                    try
+                    {
+                        var binFor = new BinaryFormatter();
+                        listOfBlocks = (List<Block>)binFor.Deserialize(myStream);
+                        
+                    }
+                    catch(Exception ex)
+                    {
+                        MessageBox.Show(LoadedFail);
+                        myStream.Close();
+                        return;
+                    }
+
+                    MessageBox.Show(LoadedSuc);
+
+                }
+
+               
+
+                
+                RefreshAll();
+            }
         }
 
         

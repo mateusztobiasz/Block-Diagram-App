@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 
 namespace Block_Diagram_App
 {
+    [Serializable]
     public abstract class Block
     {
         protected int X;
@@ -19,7 +20,7 @@ namespace Block_Diagram_App
 
         public string Label { get; set; }
 
-
+        
         protected Block(int X,int Y,int width,int height,string label)
         {
             this.X = X;
@@ -49,12 +50,14 @@ namespace Block_Diagram_App
 
         
     }
-       
-    
+
+
+    [Serializable]
     public class OperBlock : Block
     {
         // X,Y - lewy gorny róg prostokąta
 
+        
         public OperBlock(int X, int Y, int width, int height,string label) 
             : base(X, Y, width, height,label)
         {
@@ -108,6 +111,7 @@ namespace Block_Diagram_App
         }
     }
 
+    [Serializable]
     public class DecBlock : Block
     {
         // X,Y - środek romba
@@ -177,6 +181,7 @@ namespace Block_Diagram_App
         }
     }
 
+    [Serializable]
     public class StartBlock : Block
     {
         // X,Y - lewy gorny rog
@@ -234,6 +239,7 @@ namespace Block_Diagram_App
             }
         }
     }
+    [Serializable]
     public class EndBlock : Block
     {
 
